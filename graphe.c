@@ -11,6 +11,8 @@ void afficher_successeurs(pSommet * sommet, int num){
     }
 }
 
+
+
 //
 void pp_sommet2(int* ppsommet, char * nomFichier){      // fonction reprise de lire_graph / pp_sommet = PlusPetit_sommet
     FILE * ifs = fopen(nomFichier,"r");                 // fonction qui recherche le plus petit sommet du graphe afin de le rajouter

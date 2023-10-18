@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include <limits.h>
 
 // SOURCES : Bien que certaines fonctions ont été ajoutées la plupart des strcutures présentes est propirété
 //              intelectuelle de Mr DEBIZE.
