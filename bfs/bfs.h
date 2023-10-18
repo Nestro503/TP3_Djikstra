@@ -2,8 +2,8 @@
 #ifndef TP2_LABYRINTHE_BFS_H
 #define TP2_LABYRINTHE_BFS_H
 
-#include "../fifo.h"
-#include "../Graphe.h"
+#include "../fifo/fifo.h"
+#include "../graphe.h"
 
 //Permet de colorer tous les sommets en blanc avant le début du parcours
 void init_sommet(Graphe graphe);

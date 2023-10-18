@@ -14,7 +14,7 @@
 struct Arc
 {
     int sommet; // numéro de sommet d'un arc adjacent au sommet initial
-    int valeur;
+    int poids;
     struct Arc* arc_suivant;
 };
 
@@ -54,7 +54,7 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int
 void pp_sommet2(int* ppsommet, char * nomFichier);
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
-pSommet* CreerArete(pSommet* sommet,int s1,int s2);
+pSommet* CreerArete(pSommet* sommet,int s1,int s2, int poids);
 
 /* affichage des successeurs du sommet num*/
 void afficher_successeurs(pSommet * sommet, int num);

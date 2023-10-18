@@ -40,13 +40,13 @@ void pp_sommet2(int* ppsommet, char * nomFichier){      // fonction reprise de l
 }
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
-pSommet* CreerArete(pSommet* sommet,int s1,int s2){
+pSommet* CreerArete(pSommet* sommet,int s1,int s2, int poids){
 
     if(sommet[s1]->arc==NULL){
         pArc Newarc=(pArc)malloc(sizeof(struct Arc));
         Newarc->sommet=s2;
         Newarc->arc_suivant=NULL;
-        Newarc->valeur=1;   // valeur par défaut d'une arete pondere est 1
+        Newarc->poids=poids;
         sommet[s1]->arc=Newarc;
         return sommet;
     }
@@ -95,7 +95,7 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int
     Graphe* graphe;
     int compteur = 0; // compteur pour déterminer si le sommet_initial choisi correspond au graphe
     FILE * ifs = fopen(nomFichier,"r"); // ouverture du fichier choisi
-    int taille, ordre, s1, s2;
+    int taille, ordre, s1, s2,poids;
 
 
     if (!ifs){
@@ -107,7 +107,10 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int
 
     ordre = ordre + ppsommet; // le plus petit sommet est ajouté l'ordre pour évité les bugs des fichiers ou le graphe
     // ne commance pas à zéro
-
+    int tableau_sommets[ordre];
+    for (int i = 0; i < ordre; ++i) {
+        fscanf(ifs,"%d",&tableau_sommets[i]);
+    }
     graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets et mets pp_sommet en premier
 
     fscanf(ifs,"%d",&taille); // taille du fichier
@@ -118,11 +121,11 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int
     // créer les arêtes du graphe
 
     for (int i=0; i<taille; ++i){
-        fscanf(ifs,"%d%d",&s1,&s2);
+        fscanf(ifs,"%d%d%d",&s1,&s2,&poids);
         if(sommet_initial == s1 || sommet_initial == s2){
             compteur++;
         }
-        graphe->pSommet=CreerArete(graphe->pSommet, s1, s2);
+        graphe->pSommet=CreerArete(graphe->pSommet, s1, s2, poids);
 
     }
     if(compteur == 0){ // si le compteur est a 0 c'est que le sommet_initial choisi ne correspond a aucun sommets du graphe

@@ -3,7 +3,15 @@
 
 // SOURCES : fifo.h provient du site http://morissardjerome.free.fr/
 
-#include "cellule.h"
+typedef int typage;
+
+struct _cellule {
+    typage element;
+    struct _cellule *suivant;
+};
+
+typedef struct _cellule* Cellule;
+
 
 struct _file {
     int longueur;
