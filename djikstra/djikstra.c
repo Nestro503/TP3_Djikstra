@@ -1,17 +1,23 @@
 
 #include <stdio.h>
+#include <limits.h>
 #include "djikstra.h"
+#include "../graphe.h"
 
-void begin_djikstra(){
-    int init_S =0;
-    int final_S =0;
-    printf("Choisissez votre sommet de départ :\n");
-    scanf("%d",&init_S);
-    printf("Choisissez votre sommet de final :\n");
-    scanf("%d",&final_S);
+void begin_djikstra(Graphe graphe, int premier_sommet){
+    for (int i = 0; i < graphe.ordre; ++i) {
+        graphe.pSommet[i]->state = 0;
+        graphe.pSommet[i]->distance = INT_MAX; // permet de représenter l'infini
+    }
+    graphe.pSommet[premier_sommet]->state = 1;
+    graphe.pSommet[premier_sommet]->distance = 0;
 }
 
-void algo_djikstra(){
+void algo_djikstra(Graphe graphe, int premier_sommet, int dernier_sommet){;
+    begin_djikstra(graphe, premier_sommet);
+    do{
+
+    }while();
     // pour tous les sommets :
     // mettre la distance a l'inf
     // predecesseur a nulle

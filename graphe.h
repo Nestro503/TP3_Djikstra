@@ -27,6 +27,7 @@ struct Sommet
     struct Arc* arc;
     int valeur;
     char couleur;
+    int distance;
     int pred;
     bool state;
 };
@@ -39,7 +40,6 @@ typedef struct Graphe
 {
     int taille;
     int ordre;
-    int ppsommet;
     pSommet* pSommet;
 } Graphe;
 
