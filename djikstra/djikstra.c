@@ -29,10 +29,10 @@ void parcours_arc(Graphe graphe, pSommet * sommet, int sommet_depart, int* s){
 void algo_djikstra(Graphe graphe, int premier_sommet, int dernier_sommet){
     int s;
     begin_djikstra(graphe, premier_sommet);
-    do{
-        graphe.pSommet[]
-        while()
-    }while();
+    s = premier_sommet;
+    /*do{
+        graphe.pSommet[s]->state = 1;
+    }while();*/
     // pour tous les sommets :
     // mettre la distance a l'inf
     // predecesseur a nulle
