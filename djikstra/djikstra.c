@@ -1,6 +1,3 @@
-
-
-
 #include "djikstra.h"
 
 
@@ -18,27 +15,18 @@ void parcours_successeur(Graphe graphe, int* s, int tab[]){
     pSommet temp = malloc(sizeof(pSommet));
     temp->distance = INT_MAX;
     int distance;
-    printf("Parcours des arètes du sommet %d\n", *s);
     while ((arc != NULL)){
         if(tab[arc->sommet] == 0){
             distance = arc->poids + graphe.pSommet[*s]->distance;
 
-            printf("sommet %d\n", arc->sommet);
             if(distance < graphe.pSommet[arc->sommet]->distance){
                 graphe.pSommet[arc->sommet]->distance = distance;
                 graphe.pSommet[arc->sommet]->pred = *s;
             }
-            printf("condition si distance < distance_temp : %d < %d\n", graphe.pSommet[arc->sommet]->distance, temp->distance);
             if(graphe.pSommet[arc->sommet]->distance < temp->distance){
                 temp = graphe.pSommet[arc->sommet];
             }
-            printf("Variable temp : valeur : %d, distance : %d\n", temp->valeur, temp->distance);
         }
-        printf("Le tableau des marquages : ");
-        for (int i = 0; i < graphe.ordre; ++i) {
-            printf(" %d : %d //", i, tab[i]);
-        }
-        printf("\n");
         arc = arc->arc_suivant;
     }
     for (int i = 0; i < graphe.ordre; ++i) {
@@ -49,20 +37,20 @@ void parcours_successeur(Graphe graphe, int* s, int tab[]){
         }
     }
     *s = temp->valeur;
-    printf("le sommet s est désormais %d", *s);
     tab[*s] = 1;
-    printf("\n\n\n");
 }
 
 void afficher_plus_court_chemin(Graphe graphe, int premier_sommet, int dernier_sommet){
     pSommet *parkour = graphe.pSommet;
     int pred;
     pred = dernier_sommet;
+    printf("Le chemin le plus court est : ");
     printf("%d",dernier_sommet);
     while(pred != premier_sommet){
         printf(" --> %d", parkour[pred]->pred);
         pred = parkour[pred]->pred;
     }
+    printf("\nla plus petite distance totale est de %d", graphe.pSommet[dernier_sommet]->distance);
 }
 
 int tous_sommet_marque(int const tab[], int ordre){
@@ -80,7 +68,6 @@ int tous_sommet_marque(int const tab[], int ordre){
 
 void algo_djikstra(Graphe graphe, int premier_sommet, int dernier_sommet){
     int s;
-    int fin = 0;
     int tab[graphe.ordre];
     for (int i = 0; i < graphe.ordre; ++i) {
         tab[i] = 0;
