@@ -7,8 +7,9 @@
 #include "../graphe.h"
 
 void begin_djikstra(Graphe graphe, int premier_sommet);
-void algo_djikstra();
-
+void parcours_successeur(Graphe graphe, int* s, int tab[]);
+void afficher_plus_court_chemin(Graphe graphe, int premier_sommet, int dernier_sommet);
+void algo_djikstra(Graphe graphe, int premier_sommet, int dernier_sommet);
 
 
 

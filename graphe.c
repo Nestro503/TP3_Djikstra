@@ -2,77 +2,16 @@
 #include "graphe.h"
 
 // affichage des successeurs du sommet num
-void afficher_successeurs(pSommet * sommet, int num){
-    pArc arc=sommet[num]->arc;
+void afficher_successeurs(Graphe graphe, int num){
+    int degre = 0;
+    pArc arc=graphe.pSommet[num]->arc;
     printf(" sommet %d :\n",num );
     while(arc!=NULL){
         printf("%d ",arc->sommet);
         arc=arc->arc_suivant;
+        degre++;
     }
-}
-
-
-
-//
-void pp_sommet2(int* ppsommet, char * nomFichier){      // fonction reprise de lire_graph / pp_sommet = PlusPetit_sommet
-    FILE * ifs = fopen(nomFichier,"r");                 // fonction qui recherche le plus petit sommet du graphe afin de le rajouter
-    int taille, s1, s2;                                 // dans l'ordre du graphe pour ne pas avoir d'erreur d'adresse pour les graphes
-    int temp;                                           // commencant par autre chode que 0
-
-    if (!ifs){printf("Erreur de lecture fichier\n");exit(-1);}
-    fseek(ifs, 1* sizeof(int), SEEK_SET);
-    fscanf(ifs, "%d",&taille);
-    fseek(ifs, 3* sizeof(int), SEEK_SET);
-
-    int ppsommet_prev;
-
-    // créer les arêtes du graphe
-    for (int i=0; i<taille; ++i){ // on parcourt le fichier après la ligne designant l'orientation
-        ppsommet_prev = *ppsommet;
-        fscanf(ifs,"%d%d",&s1,&s2);
-        if(s1 < s2){ // si le sommet 1 de la ligne est plus petit alors on garde le sommet 1 sinon on garde le sommet 2
-            temp = s1;
-        }else{
-            temp = s2;
-        }
-        if(temp < ppsommet_prev){ // si le sommet gardé est plus petit que le sommet d'avant alors on le met dans la varaible ppsommet
-            *ppsommet = temp;
-        }
-    }
-}
-
-// Ajouter l'arête entre les sommets s1 et s2 du graphe
-pSommet* CreerArete(pSommet* sommet,int s1,int s2, int poids){
-
-    if(sommet[s1]->arc==NULL){
-        pArc Newarc=(pArc)malloc(sizeof(struct Arc));
-        Newarc->sommet=s2;
-        Newarc->arc_suivant=NULL;
-        Newarc->poids=poids;
-        sommet[s1]->arc=Newarc;
-        return sommet;
-    }
-
-    else{
-        pArc temp=sommet[s1]->arc;
-        while(temp->arc_suivant!=NULL){
-            temp=temp->arc_suivant;
-        }
-        pArc Newarc=(pArc)malloc(sizeof(struct Arc));
-        Newarc->sommet=s2;
-        Newarc->arc_suivant=NULL;
-
-        if(temp->sommet>s2){
-            Newarc->arc_suivant=temp->arc_suivant;
-            Newarc->sommet=temp->sommet;
-            temp->sommet=s2;
-            temp->arc_suivant=Newarc;
-            return sommet;
-        }
-
-        temp->arc_suivant=Newarc;
-        return sommet;
-    }
+    graphe.pSommet[num]->degre = degre;
 }
 
 // créer le graphe
@@ -89,11 +28,46 @@ Graphe* CreerGraphe(int ordre){
     return Newgraphe;
 }
 
+pSommet* CreerArete(pSommet* sommet,int s1,int s2,  int poids){
+
+    if(sommet[s1]->arc==NULL){
+        pArc Newarc=(pArc)malloc(sizeof(struct Arc));
+        Newarc->sommet=s2;
+        Newarc->arc_suivant=NULL;
+        sommet[s1]->arc=Newarc;
+        Newarc->poids=poids;
+        return sommet;
+    }
+
+    else{
+        pArc temp=sommet[s1]->arc;
+        while(temp->arc_suivant!=NULL){
+            temp=temp->arc_suivant;
+        }
+        pArc Newarc=(pArc)malloc(sizeof(struct Arc));
+        Newarc->sommet=s2;
+        Newarc->poids=poids;
+        Newarc->arc_suivant=NULL;
+
+        if(temp->sommet>s2){
+            Newarc->arc_suivant=temp->arc_suivant;
+            Newarc->sommet=temp->sommet;
+            Newarc->poids=poids;
+            temp->sommet=s2;
+            temp->arc_suivant=Newarc;
+            return sommet;
+        }
+
+        temp->arc_suivant=Newarc;
+        return sommet;
+    }
+}
+
 
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille et liste des arcs */
 
-Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int sommet_initial){
+Graphe * lire_graphe(char * nomFichier, int sommet_initial){
     Graphe* graphe;
     int compteur = 0; // compteur pour déterminer si le sommet_initial choisi correspond au graphe
     FILE * ifs = fopen(nomFichier,"r"); // ouverture du fichier choisi
@@ -107,7 +81,7 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int
 
     fscanf(ifs,"%d",&ordre); // ordre du graphe
 
-    ordre = ordre + ppsommet; // le plus petit sommet est ajouté l'ordre pour évité les bugs des fichiers ou le graphe
+    ordre = ordre; // le plus petit sommet est ajouté l'ordre pour évité les bugs des fichiers ou le graphe
     // ne commance pas à zéro
     int tableau_sommets[ordre];
     for (int i = 0; i < ordre; ++i) {
@@ -128,6 +102,7 @@ Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int
             compteur++;
         }
         graphe->pSommet=CreerArete(graphe->pSommet, s1, s2, poids);
+        graphe->pSommet=CreerArete(graphe->pSommet, s2, s1, poids);
 
     }
     if(compteur == 0){ // si le compteur est a 0 c'est que le sommet_initial choisi ne correspond a aucun sommets du graphe
@@ -149,7 +124,7 @@ void graphe_afficher(Graphe* graphe){
     printf("listes d'adjacence :\n");
 
     for (int i=0; i<graphe->ordre; i++){
-        afficher_successeurs(graphe->pSommet, i);
+        afficher_successeurs(*graphe, i);
         printf("\n");
     }
 }

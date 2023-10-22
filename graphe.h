@@ -30,6 +30,8 @@ struct Sommet
     char couleur;
     int distance;
     int pred;
+    int degre;
+    int degre_modify;
     bool state;
 };
 
@@ -50,15 +52,13 @@ Graphe* CreerGraphe(int ordre);
 
 /* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
 Le fichier contient : ordre, taille,orientation (0 ou 1)et liste des arcs */
-Graphe * lire_graphe(char * nomFichier, int ppsommet, int force_orientation, int sommet_initial);
-
-void pp_sommet2(int* ppsommet, char * nomFichier);
+Graphe * lire_graphe(char * nomFichier, int sommet_initial);
 
 // Ajouter l'arête entre les sommets s1 et s2 du graphe
 pSommet* CreerArete(pSommet* sommet,int s1,int s2, int poids);
 
 /* affichage des successeurs du sommet num*/
-void afficher_successeurs(pSommet * sommet, int num);
+void afficher_successeurs(Graphe graphe, int num);
 
 
 /*affichage du graphe avec les successeurs de chaque sommet */
