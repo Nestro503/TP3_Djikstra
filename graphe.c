@@ -1,17 +1,16 @@
 
 #include "graphe.h"
 
-// affichage des successeurs du sommet num
+/// SOURCES : Les fonctions de graphe.c proviennent des informations données pour le TP n°2
+
+// affichage des successeurs du sommet
 void afficher_successeurs(Graphe graphe, int num){
-    int degre = 0;
     pArc arc=graphe.pSommet[num]->arc;
     printf(" sommet %d :\n",num );
     while(arc!=NULL){
         printf("%d ",arc->sommet);
         arc=arc->arc_suivant;
-        degre++;
     }
-    graphe.pSommet[num]->degre = degre;
 }
 
 // créer le graphe
@@ -64,14 +63,14 @@ pSommet* CreerArete(pSommet* sommet,int s1,int s2,  int poids){
 }
 
 
-/* La construction du réseau peut se faire à partir d'un fichier dont le nom est passé en paramètre
-Le fichier contient : ordre, taille et liste des arcs */
+
+// Fonction qui prend en parametre un fichier contenant : ordre, taille et liste des arcs avec leurs poids respectifs
 
 Graphe * lire_graphe(char * nomFichier, int sommet_initial){
     Graphe* graphe;
-    int compteur = 0; // compteur pour déterminer si le sommet_initial choisi correspond au graphe
+    int compteur = 0; // compteur qui va permettre de déterminer si le sommet_initial choisi correspond au graphe
     FILE * ifs = fopen(nomFichier,"r"); // ouverture du fichier choisi
-    int taille, ordre, s1, s2,poids;
+    int taille, ordre, s1, s2, poids;
 
 
     if (!ifs){
@@ -81,27 +80,28 @@ Graphe * lire_graphe(char * nomFichier, int sommet_initial){
 
     fscanf(ifs,"%d",&ordre); // ordre du graphe
 
-    ordre = ordre; // le plus petit sommet est ajouté l'ordre pour évité les bugs des fichiers ou le graphe
-    // ne commance pas à zéro
+
     int tableau_sommets[ordre];
     for (int i = 0; i < ordre; ++i) {
         fscanf(ifs,"%d",&tableau_sommets[i]);
     }
-    graphe=CreerGraphe(ordre); // créer le graphe d'ordre sommets et mets pp_sommet en premier
 
-    fscanf(ifs,"%d",&taille); // taille du fichier
+    graphe=CreerGraphe(ordre); // créer le graphe
 
+    fscanf(ifs,"%d",&taille);
+
+    // assignation des valeurs apres lecture du fichier
     graphe->ordre=ordre;
     graphe->taille=taille;
 
-    // créer les arêtes du graphe
-
+    // lecture des arêtes du graphe ainsi que leurs poids
     for (int i=0; i<taille; ++i){
         fscanf(ifs,"%d%d%d",&s1,&s2,&poids);
         if(sommet_initial == s1 || sommet_initial == s2){
             compteur++;
         }
-        graphe->pSommet=CreerArete(graphe->pSommet, s1, s2, poids);
+
+        graphe->pSommet=CreerArete(graphe->pSommet, s1, s2, poids); // graphe non oriente donc relation symetrique entre les sommets
         graphe->pSommet=CreerArete(graphe->pSommet, s2, s1, poids);
 
     }
@@ -115,7 +115,7 @@ Graphe * lire_graphe(char * nomFichier, int sommet_initial){
 
 
 
-/*affichage du graphe avec les successeurs de chaque sommet */
+/*affichage des differentes infos du graphe receuilli a l'aide du fichier */
 void graphe_afficher(Graphe* graphe){
 
     printf("\ngraphe :");
